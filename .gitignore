@@ -15,11 +15,13 @@ ENV/
 
 # Environment Variables
 .env
-rest-api/.env
+src/web/.env
 
 # Database
 *.db
 *.db-journal
+*.db-wal
+*.db-shm
 
 # IDE
 .vscode/
@@ -37,4 +39,3 @@ Thumbs.db
 # CSV Data
 *.csv
 !.env.example
-!rest-api/.env.example

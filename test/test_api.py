@@ -1,6 +1,6 @@
 """
 Test REST API Endpoints
-Run this after starting the server (python rest-api/main.py)
+Run this after starting the server (python run_api_server.py)
 """
 
 import requests
@@ -9,7 +9,7 @@ from datetime import datetime
 
 
 # Configuration
-BASE_URL = "http://localhost:8000"
+BASE_URL = "http://127.0.0.1:8080"
 API_KEY = "iotserver"
 HEADERS = {
     "X-API-Key": API_KEY,
@@ -76,7 +76,7 @@ def test_rs485_ingest():
     print(f"Status Code: {response.status_code}")
     print(f"Response: {json.dumps(response.json(), indent=2)}")
     
-    assert response.status_code == 200
+    assert response.status_code == 202
     assert response.json()["status"] == "success"
     print("✅ RS485 ingestion passed!")
 
@@ -110,7 +110,7 @@ def test_adxl_batch_ingest():
     print(f"Status Code: {response.status_code}")
     print(f"Response: {json.dumps(response.json(), indent=2)}")
     
-    assert response.status_code == 200
+    assert response.status_code == 202
     assert response.json()["status"] == "success"
     assert response.json()["records_created"] == 50
     print("✅ ADXL batch ingestion passed!")
@@ -195,8 +195,7 @@ def main():
         print("❌ ERROR: Cannot connect to server")
         print("="*60)
         print("\nPlease start the server first:")
-        print("  cd rest-api")
-        print("  python main.py")
+        print("  python run_api_server.py")
         print("\nOr run: start_api_server.bat")
         
     except AssertionError as e:

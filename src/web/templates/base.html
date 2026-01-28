@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title or 'Sensor Dashboard' }}</title>
+    <script>
+        (function () {
+            try {
+                var theme = localStorage.getItem('theme') || 'device';
+                var root = document.documentElement;
+
+                var prefersDark = false;
+                if (window.matchMedia) {
+                    prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                }
+
+                if (theme === 'dark' || (theme === 'device' && prefersDark)) root.classList.add('dark');
+                else root.classList.remove('dark');
+
+                root.dataset.theme = theme;
+            } catch (e) {
+                // ignore
+            }
+        })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        notion: {
+                            bg: '#fbfbfa',
+                            border: '#e6e6e4',
+                            text: '#1f2328',
+                            muted: '#6b7280'
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+    {% block head %}{% endblock %}
+</head>
+
+<body class="min-h-full bg-notion-bg text-notion-text antialiased dark:bg-gray-950 dark:text-gray-100">
+    {% include 'components/navbar.html' %}
+
+    <main class="mx-auto w-full max-w-7xl px-4 py-6" id="top">
+        {% block content %}{% endblock %}
+    </main>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="{{ url_for('static', filename='js/utils.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/socket.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/realtime.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/database.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+
+</html>

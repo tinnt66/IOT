@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="space-y-4">
+    <div class="flex items-center justify-between">
+        <h1 class="text-lg font-semibold tracking-tight">Database</h1>
+        <button class="inline-flex items-center justify-center rounded-md border border-notion-border bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800 dark:focus:ring-gray-100/10"
+            type="button" id="btnDbRefresh">
+            Refresh
+        </button>
+    </div>
+
+    <div class="flex flex-wrap items-center gap-2" role="tablist" aria-label="Database Tabs">
+        <button class="rounded-md border border-notion-border bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 aria-selected:bg-gray-900 aria-selected:text-white aria-selected:border-gray-900 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:aria-selected:bg-white dark:aria-selected:text-gray-900 dark:aria-selected:border-white"
+            id="tab-rs485" type="button" role="tab" aria-controls="panel-rs485" aria-selected="true">
+            RS485 Samples
+        </button>
+        <button class="rounded-md border border-notion-border bg-white px-3 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 aria-selected:bg-gray-900 aria-selected:text-white aria-selected:border-gray-900 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-200 dark:hover:bg-gray-800 dark:aria-selected:bg-white dark:aria-selected:text-gray-900 dark:aria-selected:border-white"
+            id="tab-adxl" type="button" role="tab" aria-controls="panel-adxl" aria-selected="false">
+            ADXL Batches
+        </button>
+    </div>
+
+    <section class="rounded-xl border border-notion-border bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900" id="panel-rs485" role="tabpanel"
+        aria-labelledby="tab-rs485">
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-3 md:items-end">
+            <div>
+                <label for="rs485Start" class="text-xs font-medium text-notion-muted dark:text-gray-400">From</label>
+                <input class="mt-1 w-full rounded-md border border-notion-border bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-gray-100/10"
+                    id="rs485Start" type="datetime-local">
+            </div>
+            <div>
+                <label for="rs485End" class="text-xs font-medium text-notion-muted dark:text-gray-400">To</label>
+                <input class="mt-1 w-full rounded-md border border-notion-border bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-gray-100/10"
+                    id="rs485End" type="datetime-local">
+            </div>
+            <div class="flex flex-wrap gap-2 md:justify-end">
+                <button class="inline-flex flex-1 items-center justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900/20 md:flex-none"
+                    type="button" id="btnRs485Apply">
+                    Apply
+                </button>
+                <button class="inline-flex items-center justify-center rounded-md border border-notion-border bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800 dark:focus:ring-gray-100/10"
+                    type="button" id="btnRs485Csv" title="Export CSV">
+                    CSV
+                </button>
+                <button class="inline-flex items-center justify-center rounded-md border border-notion-border bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800 dark:focus:ring-gray-100/10"
+                    type="button" id="btnRs485Xlsx" title="Export Excel">
+                    Excel
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-4 overflow-x-auto rounded-xl border border-notion-border dark:border-gray-800">
+            <table class="min-w-full divide-y divide-notion-border text-sm">
+                <thead class="bg-notion-bg dark:bg-gray-950">
+                    <tr class="text-left text-xs font-semibold text-notion-muted dark:text-gray-400">
+                        <th class="px-4 py-3">ID</th>
+                        <th class="px-4 py-3">Time</th>
+                        <th class="px-4 py-3">Temp (°C)</th>
+                        <th class="px-4 py-3">Hum (%)</th>
+                        <th class="px-4 py-3">Wind Dir</th>
+                        <th class="px-4 py-3">Wind (m/s)</th>
+                        <th class="px-4 py-3">Created</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-notion-border bg-white dark:bg-gray-900 dark:divide-gray-800" id="rs485TableBody">
+                    <tr>
+                        <td colspan="7" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="hidden rounded-xl border border-notion-border bg-white p-5 shadow-sm dark:border-gray-800 dark:bg-gray-900" id="panel-adxl"
+        role="tabpanel" aria-labelledby="tab-adxl">
+        <div class="grid grid-cols-1 gap-3 md:grid-cols-3 md:items-end">
+            <div>
+                <label for="adxlStart" class="text-xs font-medium text-notion-muted dark:text-gray-400">From</label>
+                <input class="mt-1 w-full rounded-md border border-notion-border bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-gray-100/10"
+                    id="adxlStart" type="datetime-local">
+            </div>
+            <div>
+                <label for="adxlEnd" class="text-xs font-medium text-notion-muted dark:text-gray-400">To</label>
+                <input class="mt-1 w-full rounded-md border border-notion-border bg-white px-3 py-2 text-sm shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:focus:ring-gray-100/10"
+                    id="adxlEnd" type="datetime-local">
+            </div>
+            <div class="flex flex-wrap gap-2 md:justify-end">
+                <button class="inline-flex flex-1 items-center justify-center rounded-md bg-gray-900 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900/20 md:flex-none"
+                    type="button" id="btnAdxlApply">
+                    Apply
+                </button>
+                <button class="inline-flex items-center justify-center rounded-md border border-notion-border bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800 dark:focus:ring-gray-100/10"
+                    type="button" id="btnAdxlCsv" title="Export CSV">
+                    CSV
+                </button>
+                <button class="inline-flex items-center justify-center rounded-md border border-notion-border bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-900/10 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:hover:bg-gray-800 dark:focus:ring-gray-100/10"
+                    type="button" id="btnAdxlXlsx" title="Export Excel">
+                    Excel
+                </button>
+            </div>
+        </div>
+
+        <div class="mt-4 overflow-x-auto rounded-xl border border-notion-border dark:border-gray-800">
+            <table class="min-w-full divide-y divide-notion-border text-sm">
+                <thead class="bg-notion-bg dark:bg-gray-950">
+                    <tr class="text-left text-xs font-semibold text-notion-muted dark:text-gray-400">
+                        <th class="px-4 py-3">ID</th>
+                        <th class="px-4 py-3">Chunk Start (us)</th>
+                        <th class="px-4 py-3">Fs (Hz)</th>
+                        <th class="px-4 py-3">Sample Count</th>
+                        <th class="px-4 py-3">Created</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-notion-border bg-white dark:bg-gray-900 dark:divide-gray-800" id="adxlTableBody">
+                    <tr>
+                        <td colspan="5" class="px-4 py-6 text-center text-gray-500 dark:text-gray-400">No data</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}
